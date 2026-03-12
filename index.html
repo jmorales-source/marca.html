@@ -91,7 +91,7 @@ font-weight:bold;
 <div class="container">
 
 <div class="logo">
-Sistema de Asistencia
+Registro de Marcas
 </div>
 
 <div class="reloj">
@@ -197,7 +197,7 @@ body:data
 
 if(res=="OK"){
 
-document.getElementById("status").innerHTML="Registrado";
+document.getElementById("status").innerHTML="✅ Registro correcto";
 
 setTimeout(()=>{
 location.reload();
@@ -206,15 +206,15 @@ location.reload();
 }
 
 else if(res=="PIN"){
-document.getElementById("status").innerHTML="PIN incorrecto";
+document.getElementById("status").innerHTML="❌ PIN incorrecto";
 }
 
 else if(res=="USER"){
-document.getElementById("status").innerHTML="Usuario no existe";
+document.getElementById("status").innerHTML="🚫 Usuario no existe";
 }
 
 else{
-document.getElementById("status").innerHTML="Error de conexión";
+document.getElementById("status").innerHTML="⚠️ Error de conexión Reportar Marca con respaldo de imagen";
 }
 
 });
