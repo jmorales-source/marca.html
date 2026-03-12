@@ -104,7 +104,7 @@ Sistema de Asistencia
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbzx-7rN-hrFYZnrnSC5WI7NlEgC45mKwEVGdQkgtilyezV_8Bp--bf5OIwCK8gFKk8u/exec";
+const API="https://script.google.com/macros/s/AKfycbyAZpUGwzoWjmkihzg-hUpmWwf8JW6RmSPkOLCVc0EXjQomDIIDLVoJt_RL28NK10dV/exec";
 
 let userIP="Desconocida";
 
@@ -149,8 +149,11 @@ if(res=="OK"){
 
 document.getElementById("status").innerHTML="✅ Registro guardado";
 
+/* LIMPIAR FORMULARIO */
+document.getElementById("user").value="";
 document.getElementById("pin").value="";
 document.getElementById("note").value="";
+document.getElementById("type").value="Entrada";
 
 }
 
