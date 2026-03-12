@@ -69,10 +69,6 @@ text-align:center;
 font-weight:bold;
 }
 
-.hidden{
-display:none;
-}
-
 </style>
 
 </head>
@@ -106,26 +102,9 @@ Sistema de Asistencia
 
 </div>
 
-
-<form id="hiddenForm"
-class="hidden"
-action="https://script.google.com/macros/s/AKfycbyShNw8Fu0-JG9Ry6fwLsdiliW4TnSjCDrK2YN8kZbUwaGMch3nFsEckYBYWCf4gp5P/exec"
-method="POST"
-target="hiddenFrame">
-
-<input name="user">
-<input name="pin">
-<input name="type">
-<input name="note">
-<input name="ip">
-<input name="fecha">
-<input name="hora">
-
-</form>
-
-<iframe name="hiddenFrame" class="hidden"></iframe>
-
 <script>
+
+const API="https://script.google.com/macros/s/AKfycbwcPzLq98v1DdtyfhH_J1WwhDlWWahjZte-wp5uKOAIIZqsdvzrZhqv_JzoGhtv7_A9/exec";
 
 let userIP="Desconocida";
 
@@ -149,26 +128,51 @@ return;
 
 const now=new Date();
 
-const form=document.getElementById("hiddenForm");
+const data=new URLSearchParams();
 
-form.user.value=user;
-form.pin.value=pin;
-form.type.value=type;
-form.note.value=note;
-form.ip.value=userIP;
-form.fecha.value=now.toLocaleDateString();
-form.hora.value=now.toLocaleTimeString();
+data.append("user",user);
+data.append("pin",pin);
+data.append("type",type);
+data.append("note",note);
+data.append("ip",userIP);
+data.append("fecha",now.toLocaleDateString());
+data.append("hora",now.toLocaleTimeString());
 
-form.submit();
+fetch(API,{
+method:"POST",
+body:data
+})
+.then(r=>r.text())
+.then(res=>{
+
+if(res=="OK"){
 
 document.getElementById("status").innerHTML="✅ Registro guardado";
-
-setTimeout(()=>{
 
 document.getElementById("pin").value="";
 document.getElementById("note").value="";
 
-},500);
+}
+
+else if(res=="PIN"){
+
+document.getElementById("status").innerHTML="❌ PIN incorrecto";
+
+}
+
+else if(res=="USER"){
+
+document.getElementById("status").innerHTML="❌ Usuario no existe";
+
+}
+
+else{
+
+document.getElementById("status").innerHTML="⚠ Error de conexión";
+
+}
+
+});
 
 }
 
