@@ -13,7 +13,7 @@ td, th {border:1px solid #ccc; padding:10px;}
 </head>
 <body>
 
-<h2>Sistema de Asistencia</h2>
+<h2>Sistema de Asistencia</h2> 
 
 <input type="text" id="username" placeholder="Nombre">
 <select id="type">
