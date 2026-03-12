@@ -102,10 +102,9 @@ Sistema de Asistencia
 
 </div>
 
-<!-- FORM OCULTO -->
 
 <form id="hiddenForm"
-action="https://script.google.com/macros/s/AKfycbyIkDFOcbfX9Ugl4BvYoXHvNNL8JIzJkzL50NS6uw6JWmAOlCHUOecoDNp3vvKuBhXb/exec"
+action="https://script.google.com/macros/s/AKfycbzBLQ3vYU9P9uUwGtJ1VnJogSF9OCZWA6bLGdbF8pWFfuwJzmlGKy9f0vpTkYZIlkbH/exec"
 method="POST"
 target="hiddenFrame">
 
@@ -119,7 +118,7 @@ target="hiddenFrame">
 
 </form>
 
-<iframe name="hiddenFrame" style="display:none;"></iframe>
+<iframe name="hiddenFrame" style="width:0;height:0;border:0;display:none;"></iframe>
 
 <script>
 
@@ -127,7 +126,8 @@ let userIP="Desconocida";
 
 fetch("https://api.ipify.org?format=json")
 .then(r=>r.json())
-.then(d=>userIP=d.ip);
+.then(d=>userIP=d.ip)
+.catch(()=>{});
 
 function registrar(){
 
@@ -159,8 +159,7 @@ form.submit();
 
 document.getElementById("status").innerHTML="✅ Registro enviado";
 
-document.getElementById("pin").value="";
-document.getElementById("note").value="";
+document.getElementById("hiddenForm").reset();
 
 }
 
