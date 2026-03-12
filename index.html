@@ -23,10 +23,12 @@ margin:0;
 width:360px;
 }
 
-h1{
-color:white;
+.logo{
 text-align:center;
-margin-bottom:20px;
+font-size:22px;
+font-weight:bold;
+color:white;
+margin-bottom:15px;
 }
 
 .card{
@@ -67,14 +69,6 @@ text-align:center;
 font-weight:bold;
 }
 
-.logo{
-text-align:center;
-font-size:22px;
-font-weight:bold;
-color:white;
-margin-bottom:15px;
-}
-
 </style>
 
 </head>
@@ -108,16 +102,32 @@ Sistema de Asistencia
 
 </div>
 
-<script>
+<!-- FORM OCULTO -->
 
-const WEBAPP_URL="https://script.google.com/macros/s/AKfycbxB5iIZBaN_XmhMOHgKHHG1MPex89aCylflKHLS9i7LF8bR2pnbLEoi9XzQo3mWZUXy/exec";
+<form id="hiddenForm"
+action="https://script.google.com/macros/s/AKfycbyIkDFOcbfX9Ugl4BvYoXHvNNL8JIzJkzL50NS6uw6JWmAOlCHUOecoDNp3vvKuBhXb/exec"
+method="POST"
+target="hiddenFrame">
+
+<input name="user">
+<input name="pin">
+<input name="type">
+<input name="note">
+<input name="ip">
+<input name="fecha">
+<input name="hora">
+
+</form>
+
+<iframe name="hiddenFrame" style="display:none;"></iframe>
+
+<script>
 
 let userIP="Desconocida";
 
 fetch("https://api.ipify.org?format=json")
-.then(res=>res.json())
-.then(data=>userIP=data.ip)
-.catch(()=>{});
+.then(r=>r.json())
+.then(d=>userIP=d.ip);
 
 function registrar(){
 
@@ -135,46 +145,22 @@ return;
 
 const now=new Date();
 
-const data={
+const form=document.getElementById("hiddenForm");
 
-action:"registro",
-user:user,
-pin:pin,
-type:type,
-note:note,
-ip:userIP,
-fecha:now.toLocaleDateString(),
-hora:now.toLocaleTimeString()
+form.user.value=user;
+form.pin.value=pin;
+form.type.value=type;
+form.note.value=note;
+form.ip.value=userIP;
+form.fecha.value=now.toLocaleDateString();
+form.hora.value=now.toLocaleTimeString();
 
-};
+form.submit();
 
-fetch(WEBAPP_URL,{
-method:"POST",
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify(data)
-})
-.then(r=>r.json())
-.then(res=>{
-
-if(res.success){
-
-document.getElementById("status").innerHTML="✅ Registro guardado";
+document.getElementById("status").innerHTML="✅ Registro enviado";
 
 document.getElementById("pin").value="";
 document.getElementById("note").value="";
-
-}else{
-
-document.getElementById("status").innerHTML="❌ "+res.message;
-
-}
-
-})
-.catch(()=>{
-
-document.getElementById("status").innerHTML="❌ Error de conexión";
-
-});
 
 }
 
