@@ -5,9 +5,10 @@
 <title>Sistema de Asistencia</title>
 <style>
 body {font-family:sans-serif; background:#f0f0f0; text-align:center; padding:50px;}
-input, button {padding:10px; margin:5px;}
+input, select, button {padding:10px; margin:5px;}
 table {margin:20px auto; border-collapse:collapse;}
 td, th {border:1px solid #ccc; padding:10px;}
+#status {margin-top:20px; font-weight:bold;}
 </style>
 </head>
 <body>
@@ -25,11 +26,21 @@ td, th {border:1px solid #ccc; padding:10px;}
 <div id="status"></div>
 
 <script>
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzUONCJCVtZLUsbk7ttJzt8ij_X_lzodow5UhdZK-hEsD5NFDE23kPKHisYEUnFuLLX/exec"; 
+// URL del Web App de Google Script (reemplaza con tu URL real)
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzrmDS2GYjossWaRaIYi5GiLj_mXaEHPRiL8hIp87zbtHtlXWTHYIfWT3bOnV78N6w/exec"; 
+
+// Obtener IP pública
+let userIP = "Desconocida";
+fetch("https://api.ipify.org?format=json")
+  .then(r=>r.json())
+  .then(d=>userIP=d.ip)
+  .catch(()=>{userIP="Desconocida";});
+
 function marcarAsistencia(){
   const name = document.getElementById("username").value.trim();
   const type = document.getElementById("type").value;
   const note = document.getElementById("note").value.trim();
+  
   if(!name){ alert("Ingresa tu nombre"); return; }
 
   const now = new Date();
@@ -38,7 +49,7 @@ function marcarAsistencia(){
     type: type,
     time: now.toLocaleTimeString(),
     date: now.toISOString().split("T")[0],
-    ip: "Desconocida", // opcional: puedes agregar un fetch a api.ipify.org
+    ip: userIP,
     note: note
   };
 
@@ -47,12 +58,12 @@ function marcarAsistencia(){
     headers: {"Content-Type":"application/json"},
     body: JSON.stringify({action:"guardarAsistencia", record})
   })
-  .then(r=>r.json())
-  .then(res=>{
+  .then(r => r.json())
+  .then(res => {
     if(res.success){
       document.getElementById("status").innerText = "✅ Registro guardado";
-      document.getElementById("username").value="";
-      document.getElementById("note").value="";
+      document.getElementById("username").value = "";
+      document.getElementById("note").value = "";
     } else {
       document.getElementById("status").innerText = "❌ Error: " + (res.message || "");
     }
@@ -63,5 +74,6 @@ function marcarAsistencia(){
   });
 }
 </script>
+
 </body>
 </html>
