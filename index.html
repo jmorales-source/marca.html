@@ -26,8 +26,8 @@ td, th {border:1px solid #ccc; padding:10px;}
 <div id="status"></div>
 
 <script>
-// URL del Web App de Google Script (reemplaza con tu URL real)
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzzaGmCpEYzCZSVWhhAqS9GGaH29g9Kzy0RQMeqLGyLfk2M-XmX2MuaOi2uAe9VMYvo/exec"; 
+// URL del Web App proxy de Google Script
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzEeQ8vZEo-HaiXvyqfN20Opny8UUz-AYFkgqUJHYmXdNESdKHoyDgbaAQXWc0-T_5M/exec"; 
 
 // Obtener IP pública
 let userIP = "Desconocida";
@@ -65,7 +65,7 @@ function marcarAsistencia(){
       document.getElementById("username").value = "";
       document.getElementById("note").value = "";
     } else {
-      document.getElementById("status").innerText = "❌ Error: " + (res.message || "");
+      document.getElementById("status").innerText = "❌ Error: " + (res.message || res.error || "");
     }
   })
   .catch(e=>{
