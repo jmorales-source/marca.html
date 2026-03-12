@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Control de Asistencia Registo de Marcas</title>
+<title>Control de Asistencia</title>
 
 <style>
 
@@ -34,9 +34,14 @@ margin-bottom:5px;
 .reloj{
 text-align:center;
 color:white;
-font-size:30px;
+font-size:28px;
 font-weight:bold;
 margin-bottom:15px;
+}
+
+.fecha{
+font-size:14px;
+display:block;
 }
 
 .card{
@@ -89,7 +94,10 @@ font-weight:bold;
 Sistema de Asistencia
 </div>
 
-<div class="reloj" id="reloj"></div>
+<div class="reloj">
+<span id="fecha" class="fecha"></span>
+<span id="hora"></span>
+</div>
 
 <div class="card">
 
@@ -122,22 +130,37 @@ fetch("https://api.ipify.org?format=json")
 .then(r=>r.json())
 .then(d=>userIP=d.ip);
 
-/* RELOJ EN VIVO */
+
+/* RELOJ CON FORMATO 12 HORAS */
 
 function actualizarReloj(){
 
 const ahora = new Date();
 
-let horas = ahora.getHours().toString().padStart(2,'0');
+const dias=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+const meses=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+
+let dia = dias[ahora.getDay()];
+let fecha = ahora.getDate();
+let mes = meses[ahora.getMonth()];
+let año = ahora.getFullYear();
+
+let horas = ahora.getHours();
 let minutos = ahora.getMinutes().toString().padStart(2,'0');
 let segundos = ahora.getSeconds().toString().padStart(2,'0');
 
-document.getElementById("reloj").innerHTML = horas + ":" + minutos + ":" + segundos;
+let ampm = horas >= 12 ? "PM" : "AM";
+
+horas = horas % 12;
+horas = horas ? horas : 12;
+horas = horas.toString().padStart(2,'0');
+
+document.getElementById("fecha").innerHTML = dia+" "+fecha+" "+mes+" "+año;
+document.getElementById("hora").innerHTML = horas+":"+minutos+":"+segundos+" "+ampm;
 
 }
 
 setInterval(actualizarReloj,1000);
-
 actualizarReloj();
 
 
@@ -176,7 +199,6 @@ if(res=="OK"){
 
 document.getElementById("status").innerHTML="Registrado";
 
-/* REINICIAR TODO COMO F5 */
 setTimeout(()=>{
 location.reload();
 },800);
@@ -184,28 +206,23 @@ location.reload();
 }
 
 else if(res=="PIN"){
-
 document.getElementById("status").innerHTML="PIN incorrecto";
-
 }
 
 else if(res=="USER"){
-
 document.getElementById("status").innerHTML="Usuario no existe";
-
 }
 
 else{
-
 document.getElementById("status").innerHTML="Error de conexión";
-
 }
 
 });
 
 }
 
-/* ENTER PARA REGISTRAR */
+
+/* ENTER REGISTRA */
 
 document.addEventListener("keydown",function(e){
 
