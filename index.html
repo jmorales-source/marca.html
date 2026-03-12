@@ -136,7 +136,7 @@ data.append("type",type);
 data.append("note",note);
 data.append("ip",userIP);
 data.append("fecha",now.toLocaleDateString());
-data.append("hora",now.toLocaleTimeString());
+data.append("hora",now.toTimeString().substring(0,5));
 
 fetch(API,{
 method:"POST",
