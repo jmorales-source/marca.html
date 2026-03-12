@@ -69,6 +69,10 @@ text-align:center;
 font-weight:bold;
 }
 
+.hidden{
+display:none;
+}
+
 </style>
 
 </head>
@@ -102,9 +106,9 @@ Sistema de Asistencia
 
 </div>
 
-
 <form id="hiddenForm"
-action="https://script.google.com/macros/s/AKfycbzBLQ3vYU9P9uUwGtJ1VnJogSF9OCZWA6bLGdbF8pWFfuwJzmlGKy9f0vpTkYZIlkbH/exec"
+class="hidden"
+action="https://script.google.com/macros/s/AKfycbzKXdNrsg_qxxecjVf5m1pZgm8FKYF5fbx3lu9QRbIIxheE06wGF62I3LL18RGdlZNP/exec"
 method="POST"
 target="hiddenFrame">
 
@@ -118,7 +122,7 @@ target="hiddenFrame">
 
 </form>
 
-<iframe name="hiddenFrame" style="width:0;height:0;border:0;display:none;"></iframe>
+<iframe name="hiddenFrame" class="hidden"></iframe>
 
 <script>
 
@@ -126,8 +130,7 @@ let userIP="Desconocida";
 
 fetch("https://api.ipify.org?format=json")
 .then(r=>r.json())
-.then(d=>userIP=d.ip)
-.catch(()=>{});
+.then(d=>userIP=d.ip);
 
 function registrar(){
 
@@ -157,9 +160,15 @@ form.hora.value=now.toLocaleTimeString();
 
 form.submit();
 
-document.getElementById("status").innerHTML="✅ Registro enviado";
+document.getElementById("status").innerHTML="✅ Registro guardado";
 
-document.getElementById("hiddenForm").reset();
+setTimeout(()=>{
+
+document.getElementById("user").value="";
+document.getElementById("pin").value="";
+document.getElementById("note").value="";
+
+},500);
 
 }
 
