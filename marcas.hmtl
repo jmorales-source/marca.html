@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Sistema de Asistencia</title>
+<style>
+body {font-family:sans-serif; background:#f0f0f0; text-align:center; padding:50px;}
+input, button {padding:10px; margin:5px;}
+table {margin:20px auto; border-collapse:collapse;}
+td, th {border:1px solid #ccc; padding:10px;}
+</style>
+</head>
+<body>
+
+<h2>Sistema de Asistencia</h2>
+
+<input type="text" id="username" placeholder="Nombre">
+<select id="type">
+  <option value="Entrada">Entrada</option>
+  <option value="Salida">Salida</option>
+</select>
+<input type="text" id="note" placeholder="Nota (opcional)">
+<button onclick="marcarAsistencia()">Marcar</button>
+
+<div id="status"></div>
+
+<script>
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw6-93dqr4WMSTxXXbhb8SIIWnoSt52gZFctrM7ALPPgf0By_7FCEBcJUr1dh-s-Io9/exec"; 
+function marcarAsistencia(){
+  const name = document.getElementById("username").value.trim();
+  const type = document.getElementById("type").value;
+  const note = document.getElementById("note").value.trim();
+  if(!name){ alert("Ingresa tu nombre"); return; }
+
+  const now = new Date();
+  const record = {
+    name: name,
+    type: type,
+    time: now.toLocaleTimeString(),
+    date: now.toISOString().split("T")[0],
+    ip: "Desconocida", // opcional: puedes agregar un fetch a api.ipify.org
+    note: note
+  };
+
+  fetch(WEBAPP_URL, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({action:"guardarAsistencia", record})
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.success){
+      document.getElementById("status").innerText = "✅ Registro guardado";
+      document.getElementById("username").value="";
+      document.getElementById("note").value="";
+    } else {
+      document.getElementById("status").innerText = "❌ Error: " + (res.message || "");
+    }
+  })
+  .catch(e=>{
+    document.getElementById("status").innerText = "❌ Error al conectar con Web App";
+    console.error(e);
+  });
+}
+</script>
+</body>
+</html>
