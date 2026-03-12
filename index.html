@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Control de Asistencia</title>
+<title>Control de Asistencia Registo de Marcas</title>
 
 <style>
 
@@ -28,6 +28,14 @@ text-align:center;
 font-size:22px;
 font-weight:bold;
 color:white;
+margin-bottom:5px;
+}
+
+.reloj{
+text-align:center;
+color:white;
+font-size:30px;
+font-weight:bold;
 margin-bottom:15px;
 }
 
@@ -81,6 +89,8 @@ font-weight:bold;
 Sistema de Asistencia
 </div>
 
+<div class="reloj" id="reloj"></div>
+
 <div class="card">
 
 <input id="user" placeholder="Usuario">
@@ -104,13 +114,32 @@ Sistema de Asistencia
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbyAZpUGwzoWjmkihzg-hUpmWwf8JW6RmSPkOLCVc0EXjQomDIIDLVoJt_RL28NK10dV/exec";
+const API="https://script.google.com/macros/s/AKfycbzx-7rN-hrFYZnrnSC5WI7NlEgC45mKwEVGdQkgtilyezV_8Bp--bf5OIwCK8gFKk8u/exec";
 
 let userIP="Desconocida";
 
 fetch("https://api.ipify.org?format=json")
 .then(r=>r.json())
 .then(d=>userIP=d.ip);
+
+/* RELOJ EN VIVO */
+
+function actualizarReloj(){
+
+const ahora = new Date();
+
+let horas = ahora.getHours().toString().padStart(2,'0');
+let minutos = ahora.getMinutes().toString().padStart(2,'0');
+let segundos = ahora.getSeconds().toString().padStart(2,'0');
+
+document.getElementById("reloj").innerHTML = horas + ":" + minutos + ":" + segundos;
+
+}
+
+setInterval(actualizarReloj,1000);
+
+actualizarReloj();
+
 
 function registrar(){
 
@@ -120,10 +149,8 @@ const type=document.getElementById("type").value;
 const note=document.getElementById("note").value;
 
 if(!user||!pin){
-
 alert("Ingrese usuario y PIN");
 return;
-
 }
 
 const now=new Date();
@@ -147,37 +174,46 @@ body:data
 
 if(res=="OK"){
 
-document.getElementById("status").innerHTML="✅ Registro guardado";
+document.getElementById("status").innerHTML="Registrado";
 
-/* LIMPIAR FORMULARIO */
-document.getElementById("user").value="";
-document.getElementById("pin").value="";
-document.getElementById("note").value="";
-document.getElementById("type").value="Entrada";
+/* REINICIAR TODO COMO F5 */
+setTimeout(()=>{
+location.reload();
+},800);
 
 }
 
 else if(res=="PIN"){
 
-document.getElementById("status").innerHTML="❌ PIN incorrecto";
+document.getElementById("status").innerHTML="PIN incorrecto";
 
 }
 
 else if(res=="USER"){
 
-document.getElementById("status").innerHTML="❌ Usuario no existe";
+document.getElementById("status").innerHTML="Usuario no existe";
 
 }
 
 else{
 
-document.getElementById("status").innerHTML="⚠ Error de conexión";
+document.getElementById("status").innerHTML="Error de conexión";
 
 }
 
 });
 
 }
+
+/* ENTER PARA REGISTRAR */
+
+document.addEventListener("keydown",function(e){
+
+if(e.key==="Enter"){
+registrar();
+}
+
+});
 
 </script>
 
