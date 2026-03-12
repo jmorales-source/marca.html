@@ -1,76 +1,183 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
-<title>Sistema de Asistencia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Control de Asistencia</title>
+
 <style>
-body {font-family:sans-serif; background:#f0f0f0; text-align:center; padding:50px;}
-input, select, button {padding:10px; margin:5px;}
-#status {margin-top:20px; font-weight:bold;}
+
+body{
+font-family:Arial;
+background:linear-gradient(135deg,#1d2671,#c33764);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+margin:0;
+}
+
+.container{
+width:360px;
+}
+
+h1{
+color:white;
+text-align:center;
+margin-bottom:20px;
+}
+
+.card{
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:1px solid #ddd;
+border-radius:6px;
+font-size:14px;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:15px;
+background:#1d2671;
+color:white;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0f1342;
+}
+
+#status{
+margin-top:15px;
+text-align:center;
+font-weight:bold;
+}
+
+.logo{
+text-align:center;
+font-size:22px;
+font-weight:bold;
+color:white;
+margin-bottom:15px;
+}
+
 </style>
+
 </head>
+
 <body>
 
-<h2>Sistema de Asistencia</h2> 
+<div class="container">
 
-<input type="text" id="username" placeholder="Nombre">
+<div class="logo">
+Sistema de Asistencia
+</div>
+
+<div class="card">
+
+<input id="user" placeholder="Usuario">
+
+<input id="pin" type="password" placeholder="PIN">
+
 <select id="type">
-  <option value="Entrada">Entrada</option>
-  <option value="Salida">Salida</option>
+<option value="Entrada">Entrada</option>
+<option value="Salida">Salida</option>
 </select>
-<input type="text" id="note" placeholder="Nota (opcional)">
-<button onclick="marcarAsistencia()">Marcar</button>
+
+<input id="note" placeholder="Nota (opcional)">
+
+<button onclick="registrar()">Registrar</button>
 
 <div id="status"></div>
 
+</div>
+
+</div>
+
 <script>
-// URL del Web App proxy
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzmn-p0Inrqhfv7xnvEq7gJh2Oh7I5M3iLSl541TROg9qhloJ36HUpswT4Lr_IKWC6x/exec";
 
-// Obtener IP pública
-let userIP = "Desconocida";
+const WEBAPP_URL="https://script.google.com/macros/s/AKfycbxB5iIZBaN_XmhMOHgKHHG1MPex89aCylflKHLS9i7LF8bR2pnbLEoi9XzQo3mWZUXy/exec";
+
+let userIP="Desconocida";
+
 fetch("https://api.ipify.org?format=json")
-  .then(r => r.json())
-  .then(d => userIP = d.ip)
-  .catch(() => userIP = "Desconocida");
+.then(res=>res.json())
+.then(data=>userIP=data.ip)
+.catch(()=>{});
 
-function marcarAsistencia() {
-  const name = document.getElementById("username").value.trim();
-  const type = document.getElementById("type").value;
-  const note = document.getElementById("note").value.trim();
+function registrar(){
 
-  if(!name){ alert("Ingresa tu nombre"); return; }
+const user=document.getElementById("user").value.trim();
+const pin=document.getElementById("pin").value.trim();
+const type=document.getElementById("type").value;
+const note=document.getElementById("note").value;
 
-  const now = new Date();
-  const record = {
-    name: name,
-    type: type,
-    time: now.toLocaleTimeString(),
-    date: now.toISOString().split("T")[0],
-    ip: userIP,
-    note: note
-  };
+if(!user||!pin){
 
-  fetch(WEBAPP_URL, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({action:"guardarAsistencia", record})
-  })
-  .then(r => r.json())
-  .then(res => {
-    if(res.success){
-      document.getElementById("status").innerText = "✅ Registro guardado";
-      document.getElementById("username").value = "";
-      document.getElementById("note").value = "";
-    } else {
-      document.getElementById("status").innerText = "❌ Error: " + (res.message || res.error || "");
-    }
-  })
-  .catch(e => {
-    document.getElementById("status").innerText = "❌ Error al conectar con Web App";
-    console.error(e);
-  });
+alert("Ingrese usuario y PIN");
+return;
+
 }
+
+const now=new Date();
+
+const data={
+
+action:"registro",
+user:user,
+pin:pin,
+type:type,
+note:note,
+ip:userIP,
+fecha:now.toLocaleDateString(),
+hora:now.toLocaleTimeString()
+
+};
+
+fetch(WEBAPP_URL,{
+method:"POST",
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify(data)
+})
+.then(r=>r.json())
+.then(res=>{
+
+if(res.success){
+
+document.getElementById("status").innerHTML="✅ Registro guardado";
+
+document.getElementById("pin").value="";
+document.getElementById("note").value="";
+
+}else{
+
+document.getElementById("status").innerHTML="❌ "+res.message;
+
+}
+
+})
+.catch(()=>{
+
+document.getElementById("status").innerHTML="❌ Error de conexión";
+
+});
+
+}
+
 </script>
 
 </body>
