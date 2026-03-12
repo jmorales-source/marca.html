@@ -25,7 +25,7 @@ td, th {border:1px solid #ccc; padding:10px;}
 <div id="status"></div>
 
 <script>
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw6-93dqr4WMSTxXXbhb8SIIWnoSt52gZFctrM7ALPPgf0By_7FCEBcJUr1dh-s-Io9/exec"; 
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzUONCJCVtZLUsbk7ttJzt8ij_X_lzodow5UhdZK-hEsD5NFDE23kPKHisYEUnFuLLX/exec"; 
 function marcarAsistencia(){
   const name = document.getElementById("username").value.trim();
   const type = document.getElementById("type").value;
